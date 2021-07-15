@@ -2,6 +2,9 @@ set nocompatible
 
 execute pathogen#infect()
 
+autocmd FileType javascript setlocal shiftwidth=2 tabstop=2
+autocmd FileType javascriptreact setlocal shiftwidth=2 tabstop=2
+
 " Match ruby do / end
 runtime macros/matchit.vim
 source ~/.vim/osc52.vim
@@ -35,6 +38,8 @@ set softtabstop=2
 set expandtab
 set autoindent
 
+set bs=2
+
 " Set the command window height to 2 lines, to avoid many cases of having to
 " "press <Enter> to continue"
 set cmdheight=2
@@ -49,6 +54,8 @@ nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
+
+nnoremap <C-G> :w<CR>
 
 " tabbed window navigation
 nnoremap th  :tabfirst<CR>
@@ -74,7 +81,19 @@ inoremap jj <esc>
 map <F1> <esc>
 imap <F1> <esc>
 
-call plug#begin('~/.vim/plugged')
+" https://vim.fandom.com/wiki/Copy_filename_to_clipboard
+"nmap ,cs :let @*=expand("%")<CR>
+"nmap ,cl :let @*=expand("%:p")<CR>
+nmap ,cl :let @*=expand("%")<CR>
+nmap ,cr :let @*=expand("%t")<CR>
+
+nmap ,js :%!jq .<CR>
+
+call plug#begin()
+  Plug '~/.vim/plugged'
+  Plug 'pangloss/vim-javascript'
+  Plug 'MaxMEllon/vim-jsx-pretty'
+call plug#end()
 
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 set tags=.git/tags

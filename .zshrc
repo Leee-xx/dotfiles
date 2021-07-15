@@ -1,5 +1,6 @@
 stty -ixon
 
+alias vim="/usr/local/bin/vim"
 export CREDIBLE_DIR=~/credible
 export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
 # If you come from bash you might have to change your $PATH.
@@ -114,6 +115,8 @@ alias gpsu='git push -u origin $(gcb)'
 alias gl='git log'
 alias gsh='git show'
 alias gm='git merge'
+alias gt='git tag'
+alias gf='git fetch'
 
 gu() {
   local curr_branch=$(git rev-parse --abbrev-ref HEAD)
@@ -135,6 +138,7 @@ gu() {
 # bundle
 alias b='bundle'
 alias be='bundle exec'
+alias ber='bundle exec rspec'
 
 alias kc='kubectl'
 
@@ -166,37 +170,16 @@ function kc-use_context() {
 }
 
 function kc-ssh() {
-  local POD=$(kc-get_pods $1 $2)
+  local POD=$(kc-get_pod $1 $2)
+  local SHELL="bash"
+  if [[ $1 =~ -fe$ ]]
+  then
+    SHELL="sh"
+  fi
+
   # output a newline for nicer formatting
   echo
-  kc --context $(kc-context $2) -n $2 exec -it $POD -- bash
-  #kc -n $2 exec -it $(kc get pods -n $2 | grep $1 | cut -d " " -f 1 | head -n 1) bash
-#  case "$2" in
-#   production)
-#     kc config use-context k8s.credible.com
-#     ;;
-#   *)
-#     kc config use-context k8s.qa.credible.com
-#     ;;
-#  esac
-#  case "$1" in
-#   credible-api)
-#    kc exec $(kc get pods -n $2 | grep 'credible-api-api-[^ratealerts]' | awk '{print $1}' | head -n 1) -n $2 -it bash
-#    ;;
-#   credible-partners-api)
-#    kc exec $(kc get pods -n $2 | grep 'credible-partners-api-api' | awk '{print $1}' | head -n 1) -n $2 -it bash
-#    ;;
-#   credible-new-be)
-#    kc exec $(kc get pods -n $2 | grep 'credible-new-be-api' | awk '{print $1}' | head -n 1) -n $2 -it bash
-#    ;;
-#   credible-admin)
-#    kc exec $(kc get pods -n $2 | grep 'credible-admin' | awk '{print $1}' | head -n 1) -n $2 -it bash
-#    ;;
-#   *)
-#    echo "Usage: $0 {project} {env}"
-#    return 1
-#    ;;
-#  esac
+  kc --context $(kc-context $2) -n $2 exec -it $POD -- $SHELL
 }
 
 function kc-versions() {
@@ -212,7 +195,11 @@ function kc-versions() {
 }
 
 kc-get_pods() {
-  kc --context $(kc-context $2) get pods -n $2 | grep $1 | cut -d " " -f 1 | head -n 1
+  kc --context $(kc-context $2) get pods -n $2 | grep $1
+}
+
+kc-get_pod() {
+  kc-get_pods $1 $2 | cut -d " " -f 1 | head -n 1
 }
 
 kc-context() {
@@ -231,13 +218,21 @@ function kc-pf() {
   then
     namespace=$3
   fi
-  local POD=$(kc-get_pods $1 vault)
+  local POD=$(kc-get_pod $1 vault)
   kc --context $(kc-context $namespace) port-forward $POD -n vault $port
 }
 
 function kc-log() {
-  local POD=$(kc-get_pods $1 $2)
+  local POD=$(kc-get_pod $1 $2)
   kc --context $(kc-context $2) -n $2 logs $POD
+}
+
+kc-get_deployments() {
+  kc --context=$(kc-context $2) -n $2 get deployments -o=name | grep $1 | perl -pe "s/^.+\///g"
+}
+
+kc-restart() {
+  kc-get_deployments $1 $2 | xargs kubectl -n $2 --context=$(kc-context $2) rollout restart deployment
 }
 
 # iterm2 stuff
@@ -255,6 +250,16 @@ iterm2_print_user_vars() {
   fi
 }
 
+# Create backup file with mtime appended to filename
+bu() {
+  local file=$1
+  local mtime=$(GetFileInfo -d $file | cut -d " " -f 1)
+  local dates=($(echo $mtime | tr '/' '\n'))
+  local datestamp="$dates[3]$dates[1]$dates[2]"
+  local backup="$file.$datestamp"
+  cp $file $backup
+  echo "\nBacked up $file to $backup"
+}
 
 #ctags=/usr/local/bin/ctags
 
