@@ -7,7 +7,6 @@ autocmd FileType javascriptreact setlocal shiftwidth=2 tabstop=2
 
 " Match ruby do / end
 runtime macros/matchit.vim
-source ~/.vim/osc52.vim
 
 au BufWritePost .vimrc so $MYVIMRC
 
@@ -77,7 +76,7 @@ vnoremap <silent> <C-S>         <C-C>:update<CR>
 inoremap <silent> <C-S>         <C-O>:update<CR>
 
 " Deal with stupid macbook touchbar
-inoremap jj <esc>
+inoremap kj <esc>
 map <F1> <esc>
 imap <F1> <esc>
 
@@ -98,12 +97,4 @@ call plug#end()
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 set tags=.git/tags
 
-vmap <C-c> y:call SendViaOSC52(getreg('"'))<cr>
-
-function! SubDataReplace()
-  %s/submission.borrower.employment_summary.\(\w\+\)/submission_data['\1']/
-  %s/submission.borrower.current_address\.\(\w\+\)/submission_data['address_\1']/
-  %s/submission.borrower.\(\w\+\)/submission_data['\1']/
-  %s/submission\.uuid/submission_data['submission_uuid']/
-  %s/submission\.\(\w\+\)/submission_data['\1']/
-endfunction
+vmap <C-c> y:Oscyank<cr>
