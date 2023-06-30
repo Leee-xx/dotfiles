@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>AboutToPasteTabsWithCancel</key>
+	<true/>
+	<key>AboutToPasteTabsWithCancel_selection</key>
+	<integer>0</integer>
 	<key>AllowClipboardAccess</key>
 	<true/>
 	<key>Custom Color Presets</key>
@@ -71449,6 +71453,8 @@
 			<key>Bound Hosts</key>
 			<array>
 				<string>&amp;ssh</string>
+				<string>tedconf@</string>
+				<string>&amp;ggo</string>
 			</array>
 			<key>Character Encoding</key>
 			<integer>4</integer>
@@ -71942,6 +71948,8 @@
 	<false/>
 	<key>OpenNoWindowsAtStartup</key>
 	<false/>
+	<key>PMPrintingExpandedStateForPrint2</key>
+	<false/>
 	<key>PointerActions</key>
 	<dict>
 		<key>Button,1,1,,</key>
@@ -71975,8 +71983,10 @@
 			<string>kNextWindowPointerAction</string>
 		</dict>
 	</dict>
-	<key>ShowFullScreenTabBar</key>
+	<key>Print In Black And White</key>
 	<true/>
+	<key>ShowFullScreenTabBar</key>
+	<false/>
 	<key>SoundForEsc</key>
 	<false/>
 	<key>VisualIndicatorForEsc</key>

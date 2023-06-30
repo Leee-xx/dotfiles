@@ -1,7 +1,8 @@
 stty -ixon
 
+unsetopt nomatch
+
 alias vim="/usr/local/bin/vim"
-export CREDIBLE_DIR=~/credible
 export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
@@ -59,6 +60,10 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 # The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
 # HIST_STAMPS="mm/dd/yyyy"
 
+HISTCONTROL=ignoreboth
+setopt HIST_FIND_NO_DUPS
+setopt HIST_NO_STORE
+
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
@@ -68,6 +73,7 @@ export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || pr
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   git
+  fzf
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -104,7 +110,7 @@ source $ZSH/oh-my-zsh.sh
 alias gco="git checkout"
 alias gs='git status'
 alias gc='git commit'
-alias grs='git reset --soft HEAD~1'
+alias grs='git_reset_soft'
 alias grhd='git reset --hard'
 alias gcp='git cherry-pick'
 alias gp='git pull'
@@ -117,9 +123,30 @@ alias gsh='git show'
 alias gm='git merge'
 alias gt='git tag'
 alias gf='git fetch'
+alias gus='git restore --staged'
 
+gcurr_branch() {
+  git rev-parse --abbrev-ref HEAD
+}
+
+function git_reset_soft() {
+  local num_commits=1
+  if [ ! -z $1 ]
+  then
+    num_commits=$1
+  fi
+  git reset --soft HEAD~$num_commits
+}
+
+function git_commits_since() {
+  local commit=$1
+  gl $commit.. --pretty=oneline | wc -l
+}
+
+
+# Merges base branch into current branch
 gu() {
-  local curr_branch=$(git rev-parse --abbrev-ref HEAD)
+  local curr_branch=$(gcurr_branch)
   local base_branch="master"
   if [ ! -z $1 ]
   then
@@ -135,10 +162,29 @@ gu() {
   fi
 }
 
+# Rebases base branch onto current branch
+gurb() {
+  local curr_branch=$(gcurr_branch)
+  local base_branch="master"
+  if [ ! -z $1 ]
+  then
+    base_branch=$1
+  fi
+  echo "\nUpdating $curr_branch with $base_branch"
+  gco $base_branch && gp && gco $curr_branch && grb $base_branch
+
+  # If previous command resulted in an error, go back to the initial branch
+  if [ $? != 0 ]
+  then
+    gco $curr_branch
+  fi
+}
+
 # bundle
 alias b='bundle'
 alias be='bundle exec'
 alias ber='bundle exec rspec'
+alias berc='bundle exec rails c'
 
 alias kc='kubectl'
 
@@ -151,12 +197,16 @@ alias ll="ls -lah"
 
 alias mysource="source ~/.zshrc"
 
-eval "$(rbenv init -)"
+#eval "$(rbenv init -)"
 
 alias pip3="python3 -m pip"
 
+# aliases to preserve text color when piping to less
+alias rgl="rg --color=always"
+alias ggl="gg --color=always"
+
 export EDITOR=vim
-export PATH="$HOME/.rbenv/shims:$PATH"
+#export PATH="$HOME/.rbenv/shims:$PATH"
 export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/opt/openssl/lib/
 
 function kc-use_context() {
@@ -236,17 +286,17 @@ kc-restart() {
 }
 
 # iterm2 stuff
-source /Users/leewang/.iterm2_shell_integration.zsh
+source ~/.iterm2_shell_integration.zsh
 iterm2_print_user_vars() {
   #iterm2_set_user_var gitBranch $((git branch 2> /dev/null) | grep \* | cut -c3-)
-  if [[ `pwd` = *"/credible/"* ]]
+  if [[ `pwd` = *"/code/"* ]]
   then
     app=`pwd | cut -d '/' -f 5`
-    app=${app#'credible-'}
-    app=${app#'credible_'}
-    iterm2_set_user_var credible_app $app
+    # app=${app#'credible-'}
+    # app=${app#'credible_'}
+    iterm2_set_user_var app $app
   else
-    iterm2_set_user_var credible_app ""
+    iterm2_set_user_var app ""
   fi
 }
 
@@ -261,7 +311,82 @@ bu() {
   echo "\nBacked up $file to $backup"
 }
 
+backup_dotfiles() {
+}
+
+baudit_ignore() {
+  bundle exec bundler-audit | grep Advisory: | perl -pe "s/Advisory: (\S+)\n/\1 /"
+}
+
+cdgem() {
+  local gem=$1
+  local dir=$(b show $gem)
+  if [ -d "$dir" ]
+  then
+    cd $dir
+  fi
+}
+
 #ctags=/usr/local/bin/ctags
 
 export GOPATH=$HOME/code/go
 export PATH=$PATH:/usr/local/go/bin
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
+
+# TED
+# infrastructure stuff
+export PATH="$PATH:$HOME/code/infrastructure/bin"
+
+export skip_coyote_integration_tests=true
+export COYOTE_GEM_PATH=/Users/leewang/code/coyote
+
+# From https://gist.github.com/bmhatfield/cc21ec0a3a2df963bffa3c1f884b676b dpr 2017-01-01
+
+# In order for gpg to find gpg-agent, gpg-agent must be running, and there must be an env
+# variable pointing GPG to the gpg-agent socket. This little script, which must be sourced
+# in your shell's init script (ie, .bash_profile, .zshrc, whatever), will either start
+# gpg-agent or set up the GPG_AGENT_INFO variable if it's already running.
+
+# Add the following to your shell init to set up gpg-agent automatically for every shell
+if [ -f ~/.gnupg/.gpg-agent-info ] && [ -n "$(pgrep gpg-agent)" ]; then
+    source ~/.gnupg/.gpg-agent-info
+    export GPG_AGENT_INFO
+else
+    eval $(gpg-agent --daemon)
+fi
+
+# NVM
+export NVM_DIR="$HOME/.nvm"
+[ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
+# place this after nvm initialization!
+#autoload -U add-zsh-hook
+#load-nvmrc() {
+#  local node_version="$(nvm version)"
+#  local nvmrc_path="$(nvm_find_nvmrc)"
+#
+#  if [ -n "$nvmrc_path" ]; then
+#    local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
+#
+#    if [ "$nvmrc_node_version" = "N/A" ]; then
+#      nvm install
+#    elif [ "$nvmrc_node_version" != "$node_version" ]; then
+#      nvm use
+#    fi
+#  elif [ "$node_version" != "$(nvm version default)" ]; then
+#    echo "Reverting to nvm default version"
+#    nvm use default
+#  fi
+#}
+#add-zsh-hook chpwd load-nvmrc
+#load-nvmrc
+#function nvm_auto_switch --on-variable PWD
+#  if test -e '.nvmrc'
+#      nvm use
+#  end
+#end
+
+export PATH="/usr/local/opt/elasticsearch@6/bin:$PATH"
