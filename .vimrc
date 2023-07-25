@@ -54,6 +54,10 @@ nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
 
+" Uses _ instead of - to make holding down shift easier
+nnoremap _ :resize -5<CR>
+nnoremap + :resize +5<CR>
+
 nnoremap <C-G> :w<CR>
 
 " tabbed window navigation
@@ -92,9 +96,11 @@ call plug#begin()
   Plug '~/.vim/plugged'
   Plug 'pangloss/vim-javascript'
   Plug 'MaxMEllon/vim-jsx-pretty'
+  Plug 'preservim/nerdtree'
+  Plug 'ojroques/vim-oscyank', {'branch': 'main'}
 call plug#end()
 
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 set tags=.git/tags
 
-vmap <C-c> y:Oscyank<cr>
+vmap <C-c> y:OSCYankVisual<cr>
