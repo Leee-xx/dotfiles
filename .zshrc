@@ -197,7 +197,7 @@ alias ll="ls -lah"
 
 alias mysource="source ~/.zshrc"
 
-#eval "$(rbenv init -)"
+eval "$(rbenv init -)"
 
 alias pip3="python3 -m pip"
 
@@ -206,7 +206,7 @@ alias rgl="rg --color=always"
 alias ggl="gg --color=always"
 
 export EDITOR=vim
-#export PATH="$HOME/.rbenv/shims:$PATH"
+export PATH="$HOME/.rbenv/shims:$PATH"
 export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/opt/openssl/lib/
 
 function kc-use_context() {
@@ -333,14 +333,7 @@ export GOPATH=$HOME/code/go
 export PATH=$PATH:/usr/local/go/bin
 
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
-
-# TED
-# infrastructure stuff
-export PATH="$PATH:$HOME/code/infrastructure/bin"
-
-export skip_coyote_integration_tests=true
-export COYOTE_GEM_PATH=/Users/leewang/code/coyote
+#export PATH="$PATH:$HOME/.rvm/bin"
 
 # From https://gist.github.com/bmhatfield/cc21ec0a3a2df963bffa3c1f884b676b dpr 2017-01-01
 
@@ -390,3 +383,5 @@ export NVM_DIR="$HOME/.nvm"
 #end
 
 export PATH="/usr/local/opt/elasticsearch@6/bin:$PATH"
+export PATH="/usr/local/opt/ruby/bin:$PATH"
+
