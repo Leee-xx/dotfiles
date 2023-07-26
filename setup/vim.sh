@@ -25,12 +25,16 @@ function install_tpope_start_plugin() {
   fi
 }
 
+echo -e "\n*** Setting up VIM ***"
+
 if [ $(vim --version | grep -c +clipboard) == 1 ]; then
   echo "vim already has +clipboard installed"
 else
   echo "installing vim through brew"
   brew install vim
+  cp ./.vimrc ~/.vimrc
 fi
+
 
 if [ ! -f ~/.vim/autoload/pathogen.vim ]; then
   echo "Installing VIM pathogen plugin manager"
@@ -58,4 +62,4 @@ if [ ! -d ~/.vim/pack/plugins/start/ctrlp ]; then
   git clone --depth=1 https://github.com/ctrlpvim/ctrlp.vim.git ~/.vim/pack/plugins/start/ctrlp
 fi
 
-echo "Finished setting up VIM"
+echo "* Finished setting up VIM"

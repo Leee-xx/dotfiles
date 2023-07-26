@@ -1,5 +1,8 @@
-github_email=$1
 # Download iterm2: https://iterm2.com/
+
+github_email=$1
+
+echo "*** Setting up local machine ***"
 
 # Install brew
 if [ -x "$(command -v brew)" ]; then
@@ -18,6 +21,12 @@ else
   # Install oh-my-zsh
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
   # May need to separately brew install fzf
+  cp ./.zshrc ~/
+  source ~/.zshrc
 fi
 
-bash setup/github.sh $github_email
+bash ./setup/github.sh $github_email
+bash ./setup/vim.sh
+bash ./setup/ruby.sh
+
+echo -e "\n* Finished setting up loacl machine"
