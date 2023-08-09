@@ -327,6 +327,15 @@ cdgem() {
   fi
 }
 
+# python functions and aliases
+activate() {
+  local env='env'
+  if [ ! -z $1 ]; then
+    env=$1
+  fi
+  source $env/bin/activate
+}
+
 #ctags=/usr/local/bin/ctags
 
 export GOPATH=$HOME/code/go

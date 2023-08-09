@@ -1,4 +1,7 @@
 # Download iterm2: https://iterm2.com/
+# Then, open Iterm2, go to Preferences, click the Preferences tab, check the
+# "Load preferences from a custom folder or URL", and navigate to
+# com.googlecode.iterm2.plist
 
 github_email=$1
 
