@@ -199,8 +199,6 @@ alias mysource="source ~/.zshrc"
 
 eval "$(rbenv init -)"
 
-alias pip3="python3 -m pip"
-
 # aliases to preserve text color when piping to less
 alias rgl="rg --color=always"
 alias ggl="gg --color=always"
@@ -328,6 +326,9 @@ cdgem() {
 }
 
 # python functions and aliases
+alias pip3="python3 -m pip"
+eval "$(_PIPENV_COMPLETE=zsh_source pipenv)"
+
 activate() {
   local env='env'
   if [ ! -z $1 ]; then
