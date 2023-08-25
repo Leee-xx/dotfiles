@@ -329,7 +329,7 @@ cdgem() {
 alias pip3="python3 -m pip"
 eval "$(_PIPENV_COMPLETE=zsh_source pipenv)"
 
-activate() {
+pyactivate() {
   local env='env'
   if [ ! -z $1 ]; then
     env=$1
