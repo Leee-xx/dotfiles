@@ -35,7 +35,6 @@ else
   cp ./.vimrc ~/.vimrc
 fi
 
-
 if [ ! -f ~/.vim/autoload/pathogen.vim ]; then
   echo "Installing VIM pathogen plugin manager"
   mkdir -p ~/.vim/autoload ~/.vim/bundle
@@ -49,6 +48,7 @@ if [ ! -f ~/.vim/autoload/plug.vim ]; then
 fi
 
 # Install plugins
+vi +'PlugInstall --sync' +qa
 
 install_tpope_bundle_plugin 'vim-rails'
 install_tpope_bundle_plugin 'vim-obsession'
