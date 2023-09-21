@@ -21,7 +21,7 @@ set ruler
 set hlsearch
 
 " Line numbers
-"set number
+" Set hybrid line numbers
 set number relativenumber
 
 set laststatus=2
@@ -89,6 +89,7 @@ imap <F1> <esc>
 "nmap ,cl :let @*=expand("%:p")<CR>
 nmap ,cl :let @*=expand("%")<CR>
 nmap ,cr :let @*=expand("%t")<CR>
+nmap ,cd :let @*=expand("%:p:h")<CR>
 
 nmap ,js :%!jq .<CR>
 
@@ -98,6 +99,7 @@ call plug#begin()
   Plug 'MaxMEllon/vim-jsx-pretty'
   Plug 'preservim/nerdtree'
   Plug 'ojroques/vim-oscyank', {'branch': 'main'}
+  Plug 'chrisbra/csv.vim'
 call plug#end()
 
 set runtimepath^=~/.vim/bundle/ctrlp.vim
