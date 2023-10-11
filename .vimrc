@@ -91,6 +91,10 @@ nmap ,cl :let @*=expand("%")<CR>
 nmap ,cr :let @*=expand("%t")<CR>
 nmap ,cd :let @*=expand("%:p:h")<CR>
 
+nmap ,gb :Git blame %<CR>
+nmap ,ga :Git add %<CR>
+nmap ,go :Gread<CR>
+
 nmap ,js :%!jq .<CR>
 
 call plug#begin()
