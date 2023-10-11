@@ -2,6 +2,13 @@
 # Then, open Iterm2, go to Preferences, click the Preferences tab, check the
 # "Load preferences from a custom folder or URL", and navigate to
 # com.googlecode.iterm2.plist
+# Preferences > Profiles > Keys (https://mariusschulz.com/blog/keyboard-shortcuts-for-jumping-and-deleting-in-iterm2)
+#   Left/Right option key: Esc+
+#   > Key Mappings
+#       Command | Action | Send
+#     + Jump to start of word | Send Escape | b
+#     + Jump to end of word | Send Escape | f
+#     + Delete to start of word | Send Hex Codes | 0x17
 
 github_email=$1
 
@@ -20,10 +27,12 @@ if [ -x "$(command -v zsh)" ]; then
   echo "zsh already installed"
 else
   echo "Installing zsh and zsh packages"
-  brew install zsh zsh-completions
+  brew install zsh
   # Install oh-my-zsh
   sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
   # May need to separately brew install fzf
+  brew install fzf
+  curl -L https://iterm2.com/shell_integration/zsh -o ~/.iterm2_shell_integration.zsh
   cp ./.zshrc ~/
   source ~/.zshrc
 fi

@@ -55,6 +55,7 @@ install_tpope_bundle_plugin 'vim-obsession'
 
 install_tpope_start_plugin 'surround'
 install_tpope_start_plugin 'abolish'
+install_tpope_start_plugin 'fugitive'
 
 # Install ctrlp: https://github.com/ctrlpvim/ctrlp.vim
 if [ ! -d ~/.vim/pack/plugins/start/ctrlp ]; then
