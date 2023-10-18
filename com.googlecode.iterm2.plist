@@ -71187,6 +71187,8 @@
 			<true/>
 			<key>Use Bright Bold</key>
 			<true/>
+			<key>Use Cursor Guide</key>
+			<true/>
 			<key>Use Italic Font</key>
 			<true/>
 			<key>Use Non-ASCII Font</key>
@@ -72005,6 +72007,8 @@
 	<false/>
 	<key>SoundForEsc</key>
 	<false/>
+	<key>TimeBetweenBlinks</key>
+	<real>0.5</real>
 	<key>VisualIndicatorForEsc</key>
 	<false/>
 	<key>findMode_iTerm</key>
