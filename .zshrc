@@ -74,6 +74,7 @@ setopt HIST_NO_STORE
 plugins=(
   git
   fzf
+  notify
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -148,7 +149,7 @@ function git_commits_since() {
 # Merges base branch into current branch
 gu() {
   local curr_branch=$(gcurr_branch)
-  local base_branch="master"
+  local base_branch="main"
   if [ ! -z $1 ]
   then
     base_branch=$1
@@ -166,7 +167,7 @@ gu() {
 # Rebases base branch onto current branch
 gurb() {
   local curr_branch=$(gcurr_branch)
-  local base_branch="master"
+  local base_branch="main"
   if [ ! -z $1 ]
   then
     base_branch=$1
