@@ -15,8 +15,8 @@ export ZSH=/Users/leewang/.oh-my-zsh
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
 ZSH_THEME="robbyrussell"
 
-export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+#export NVM_DIR="$([ -z "${XDG_CONFIG_HOME-}" ] && printf %s "${HOME}/.nvm" || printf %s "${XDG_CONFIG_HOME}/nvm")"
+#[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
 # Set list of themes to load
 # Setting this variable when ZSH_THEME=random
@@ -187,6 +187,7 @@ alias b='bundle'
 alias be='bundle exec'
 alias ber='bundle exec rspec'
 alias berc='bundle exec rails c'
+alias bers='bundle exec rails s'
 
 alias kc='kubectl'
 
@@ -199,14 +200,14 @@ alias ll="ls -lah"
 
 alias mysource="source ~/.zshrc"
 
-eval "$(rbenv init -)"
+#eval "$(rbenv init -)"
 
 # aliases to preserve text color when piping to less
 alias rgl="rg --color=always"
 alias ggl="gg --color=always"
 
 export EDITOR=vim
-export PATH="$HOME/.rbenv/shims:$PATH"
+#export PATH="$HOME/.rbenv/shims:$PATH"
 export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/opt/openssl/lib/
 
 function kc-use_context() {
@@ -292,8 +293,6 @@ iterm2_print_user_vars() {
   if [[ `pwd` = *"/code/"* ]]
   then
     app=`pwd | cut -d '/' -f 5`
-    # app=${app#'credible-'}
-    # app=${app#'credible_'}
     iterm2_set_user_var app $app
   else
     iterm2_set_user_var app ""
@@ -327,9 +326,11 @@ cdgem() {
   fi
 }
 
+source $ZSH_CUSTOM/plugins/notify/notify.plugin.zsh
+
 # python functions and aliases
 alias pip3="python3 -m pip"
-eval "$(_PIPENV_COMPLETE=zsh_source pipenv)"
+#eval "$(_PIPENV_COMPLETE=zsh_source pipenv)"
 
 pyactivate() {
   local env='env'
@@ -361,38 +362,6 @@ export PATH=$PATH:/usr/local/go/bin
 #else
 #    eval $(gpg-agent --daemon)
 #fi
-
-# NVM
-export NVM_DIR="$HOME/.nvm"
-[ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
-[ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
-
-# place this after nvm initialization!
-#autoload -U add-zsh-hook
-#load-nvmrc() {
-#  local node_version="$(nvm version)"
-#  local nvmrc_path="$(nvm_find_nvmrc)"
-#
-#  if [ -n "$nvmrc_path" ]; then
-#    local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
-#
-#    if [ "$nvmrc_node_version" = "N/A" ]; then
-#      nvm install
-#    elif [ "$nvmrc_node_version" != "$node_version" ]; then
-#      nvm use
-#    fi
-#  elif [ "$node_version" != "$(nvm version default)" ]; then
-#    echo "Reverting to nvm default version"
-#    nvm use default
-#  fi
-#}
-#add-zsh-hook chpwd load-nvmrc
-#load-nvmrc
-#function nvm_auto_switch --on-variable PWD
-#  if test -e '.nvmrc'
-#      nvm use
-#  end
-#end
 
 export PATH="/usr/local/opt/elasticsearch@6/bin:$PATH"
 export PATH="/usr/local/opt/ruby/bin:$PATH"
