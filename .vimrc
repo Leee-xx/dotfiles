@@ -97,6 +97,10 @@ nmap ,ga :Git add %<CR>
 nmap ,go :Gread<CR>
 nmap ,gd :G diff %<CR>
 
+" Ruby
+nmap ,rB :!bundle exec rubocop -a %<CR>
+nmap ,rc :!ruby -c %<CR>
+
 nmap ,js :%!jq .<CR>
 
 call plug#begin()
