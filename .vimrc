@@ -1,5 +1,8 @@
 set nocompatible
 set re=2
+set autoread
+au CursorHold,CursorHoldI * checktime
+au FocusGained,BufEnter * :checktime
 
 execute pathogen#infect()
 
@@ -99,10 +102,12 @@ nmap ,go :Gread<CR>
 nmap ,gd :G diff %<CR>
 
 " Ruby
+nmap ,rb :!bundle exec rubocop %<CR>
 nmap ,rB :!bundle exec rubocop -a %<CR>
 nmap ,rc :!ruby -c %<CR>
 
 nmap ,js :%!jq .<CR>
+nmap ,jp :%!pnpm exec prettier % --write<CR>
 
 call plug#begin()
   Plug '~/.vim/plugged'
@@ -111,9 +116,47 @@ call plug#begin()
   Plug 'preservim/nerdtree'
   Plug 'ojroques/vim-oscyank', {'branch': 'main'}
   Plug 'chrisbra/csv.vim'
+  Plug 'dense-analysis/ale'
 call plug#end()
+
+" ALE
+highlight ALEWarning ctermbg=lightyellow
+" run :runtime syntax/colortest.vim to see available color names
+highlight ALEError ctermbg=89
+let g:ale_fixers = {
+\   '*': ['remove_trailing_lines', 'trim_whitespace'],
+\   'javascript': ['eslint'],
+\   'ruby': ['rubocop'],
+\}
+
 
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 set tags=.git/tags
 
 vmap <C-c> y:OSCYankVisual<cr>
+
+function ReformatSymbolList() range
+  execute a:firstline . ',' . a:lastline . 's/\v:(\w+),?/\1/g'
+endfunction
+
+" :call ReplaceTry()
+function ReplaceTry() range
+  execute a:firstline . ',' . a:lastline . 's/\v\.try\(:(\w+)\)/\&.\1/g'
+endfunction
+
+let g:rails_projections = {
+      \  "app/controllers/*_controller.rb": {
+      \      "test": [
+      \        "spec/requests/{}_spec.rb",
+      \      ],
+      \      "alternate": [
+      \        "spec/requests/{}_spec.rb",
+      \      ],
+      \   },
+      \   "spec/requests/*_spec.rb": {
+      \      "command": "request",
+      \      "alternate": "app/controllers/{}_controller.rb",
+      \      "template": "require 'rails_helper'\n\n" .
+      \        "RSpec.describe '{}' do\nend",
+      \   },
+      \ }
