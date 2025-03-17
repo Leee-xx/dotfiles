@@ -208,7 +208,8 @@ alias ggl="gg --color=always"
 
 export EDITOR=vim
 #export PATH="$HOME/.rbenv/shims:$PATH"
-export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/opt/openssl/lib/
+# This line only works on intel macs -- M1s and later will have problems:
+#export LIBRARY_PATH=$LIBRARY_PATH:/usr/local/opt/openssl/lib/
 
 function kc-use_context() {
   CONTEXT="k8s.qa.credible.com"

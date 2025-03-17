@@ -50,5 +50,7 @@ append_if '**/[._]*.sw[a-p]' $ignore_file
 append_if '**/.byebug_history' $ignore_file
 
 git config --global init.defaultBranch main
+git config --global fetch.prune true
+git config --global pull.rebase true
 
 echo "* Finished setting up Git/Github"
