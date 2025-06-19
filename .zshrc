@@ -72,13 +72,12 @@ setopt HIST_NO_STORE
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
+  fzf # might need to delete this?
   git
-  fzf
-  notify
+  bgnotify
 )
 
 source $ZSH/oh-my-zsh.sh
-export FZF_BASE=$(which fzf)
 
 # User configuration
 
@@ -100,9 +99,12 @@ export FZF_BASE=$(which fzf)
 # ssh
 # export SSH_KEY_PATH="~/.ssh/rsa_id"
 
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+# Set personal aliases, overriding those provided by Oh My Zsh libs,
+# plugins, and themes. Aliases can be placed here, though Oh My Zsh
+# users are encouraged to define aliases within a top-level file in
+# the $ZSH_CUSTOM folder, with .zsh extension. Examples:
+# - $ZSH_CUSTOM/aliases.zsh
+# - $ZSH_CUSTOM/macos.zsh
 # For a full list of active aliases, run `alias`.
 #
 # Example aliases
@@ -111,7 +113,8 @@ export FZF_BASE=$(which fzf)
 
 alias gco="git checkout"
 alias gs='git status'
-alias gc='git commit'
+alias gc='git diff HEAD --name-only | grep -E "\.rb$" | xargs bundle exec rubocop && git commit'
+alias gcf='git commit'
 alias grs='git_reset_soft'
 alias grhd='git reset --hard'
 alias gcp='git cherry-pick'
@@ -185,7 +188,8 @@ gurb() {
 # bundle
 alias b='bundle'
 alias be='bundle exec'
-alias ber='bundle exec rspec'
+alias ber='bundle exec rspec --format doc'
+alias bero='bundle exec rspec --format doc --order defined'
 alias berc='bundle exec rails c'
 alias bers='bundle exec rails s'
 
@@ -300,6 +304,9 @@ iterm2_print_user_vars() {
   fi
 }
 
+# Set up fzf key bindings and fuzzy completion
+source <(fzf --zsh)
+
 # Create backup file with mtime appended to filename
 bu() {
   local file=$1
@@ -366,4 +373,3 @@ export PATH=$PATH:/usr/local/go/bin
 
 export PATH="/usr/local/opt/elasticsearch@6/bin:$PATH"
 export PATH="/usr/local/opt/ruby/bin:$PATH"
-
