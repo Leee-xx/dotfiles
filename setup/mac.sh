@@ -10,6 +10,11 @@
 #     + Jump to end of word | Send Escape | f
 #     + Delete to start of word | Send Hex Codes | 0x17
 
+# For automatic profile switching while SSHing (or similar remote access):
+# 1. Profiles > Advanced > Automatic Profile Switching > +
+# 2. Add `&ssh` (or if you're using kubernetes to login, `&kubectl`)
+
+# Usage: ./mac.sh <github email>
 github_email=$1
 
 echo "*** Setting up local machine ***"
