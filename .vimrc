@@ -62,6 +62,10 @@ nnoremap <C-H> <C-W><C-H>
 nnoremap _ :resize -5<CR>
 nnoremap + :resize +5<CR>
 
+" select all
+"vmap ,a :%y+<CR>
+
+" save
 nnoremap <C-G> :w<CR>
 
 " tabbed window navigation
@@ -128,7 +132,11 @@ let g:ale_fixers = {
 \   'javascript': ['eslint'],
 \   'ruby': ['rubocop'],
 \}
+" Set this variable to 1 to fix files when you save them.
+let g:ale_fix_on_save = 1
 
+nmap ,as :let g:ale_fix_on_save = 1<CR>
+nmap ,ao :let g:ale_fix_on_save = 0<CR>
 
 set runtimepath^=~/.vim/bundle/ctrlp.vim
 set tags=.git/tags

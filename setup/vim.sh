@@ -32,7 +32,13 @@ if [ $(vim --version | grep -c +clipboard) == 1 ]; then
 else
   echo "installing vim through brew"
   brew install vim
-  cp ./.vimrc ~/.vimrc
+fi
+
+if [ ! -f ~/.vimrc ]; then
+  curr_dir=$PWD
+  cd
+  ln -s "${curr_dir}/.vimrc" ~/.vimrc
+  cd -
 fi
 
 if [ ! -f ~/.vim/autoload/pathogen.vim ]; then
